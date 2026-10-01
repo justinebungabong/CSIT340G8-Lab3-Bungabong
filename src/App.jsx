@@ -1,5 +1,5 @@
 const Header = (props) => {
-  return <h1>{props.course}</h1>
+  return <h1>{props.course.name}</h1>
 }
 
 const Part = (props) => {
@@ -11,19 +11,21 @@ const Part = (props) => {
 }
 
 const Content = (props) => {
+  const parts = props.course.parts
   return (
     <div>
-      <Part part={props.part1} />
-      <Part part={props.part2} />
-      <Part part={props.part3} />
+      {parts.map(part => (
+        <Part key={part.name} part={part} />
+      ))}
     </div>
   )
 }
 
 const Total = (props) => {
+  const total = props.course.parts.reduce((sum, part) => sum + part.units, 0)
   return (
     <p>
-      Total number of units: {props.part1.units + props.part2.units + props.part3.units}
+      Total number of units: {total}
     </p>
   )
 }
@@ -39,19 +41,13 @@ const Footer = (props) => {
 }
 
 const App = () => {
-  const course = 'Bachelor of Science in Information Technology'
-
-  const part1 = {
-    name: 'CSIT340 - Industry Elective 1',
-    units: 3
-  }
-  const part2 = {
-    name: 'IT365 - Data Analytics 1',
-    units: 3
-  }
-  const part3 = {
-    name: 'CSIT327 - Information Management 2',
-    units: 3
+  const course = {
+    name: 'Bachelor of Science in Information Technology',
+    parts: [
+      { name: 'CSIT340 - Industry Elective 1', units: 3 },
+      { name: 'IT365 - Data Analytics 1', units: 3 },
+      { name: 'CSIT327 - Information Management 2', units: 3 }
+    ]
   }
 
   const studentName = 'Justine T. Bungabong'
@@ -61,8 +57,8 @@ const App = () => {
   return (
     <div>
       <Header course={course} />
-      <Content part1={part1} part2={part2} part3={part3} />
-      <Total part1={part1} part2={part2} part3={part3} />
+      <Content course={course} />
+      <Total course={course} />
       <Footer studentName={studentName} courseCode={courseCode} section={section} />
     </div>
   )
